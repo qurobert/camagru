@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  app:
+    build: ./app
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=secret
+      - DB_NAME=mydatabase
+    depends_on:
+      - db
+    volumes:
+      - ./app:/usr/src/app
+      - /usr/src/app/node_modules
+  db:
+    image: mysql:8.3
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: mydatabase
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql # Mount the init.sql file
+volumes:
+  db-data:
+
