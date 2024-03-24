@@ -22,6 +22,15 @@ services:
     volumes:
       - db-data:/var/lib/mysql
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql # Mount the init.sql file
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+    volumes:
+      - ./nginx/public:/usr/share/nginx/html:ro
+      - ./nginx/config:/etc/nginx/conf.d:ro
 volumes:
   db-data:
 
