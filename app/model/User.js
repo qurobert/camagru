@@ -1,4 +1,4 @@
-const knex = require('./db')
+const knex = require('./knex')
 class User {
     static async findAll() {
         return knex('users').select('*')
