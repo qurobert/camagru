@@ -1,8 +1,7 @@
-const knex = require('./knex')
-class User {
+import knex from "./knexfile.js";
+
+export default class User {
     static async findAll() {
         return knex('Users').select('*')
     }
 }
-
-module.exports = User

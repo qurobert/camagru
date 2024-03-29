@@ -31,4 +31,3 @@ CREATE TABLE Likes (
     FOREIGN KEY (image_id) REFERENCES Images(id),
     FOREIGN KEY (user_id) REFERENCES Users(id)
 );
-

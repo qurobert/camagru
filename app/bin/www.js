@@ -1,6 +1,7 @@
-const app = require('../app');
-const http = require('http');
+import app from '../app.js';
+import http from 'http';
 // const debug = require('debug')('test:server');
+
 const port = 3000
 
 app.set('port', port);

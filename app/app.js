@@ -1,6 +1,6 @@
 import express from 'express'
-import indexRouter from './routes/IndexRouter'
-import usersRouter from './routes/IndexRouter'
+import indexRouter from './routes/IndexRouter.js'
+import usersRouter from './routes/UserRouter.js'
 
 const app = express()
 // const indexRouter = require('./routes/index');
@@ -12,8 +12,8 @@ const app = express()
 app.use(express.json()); // TODO : A ENLEVER SUREMENT PEUT ETRE PK PAS
 app.use(express.urlencoded({ extended: false })); // TODO : A ENLEVER SUREMENT PEUT ETRE PK PAS
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use("/", indexRouter);
+app.use("/users", usersRouter);
 
 export default app
 // error handler

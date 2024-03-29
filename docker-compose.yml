@@ -6,7 +6,7 @@ services:
       - "3000:3000"
     environment:
       DB_HOST: db
-      DB_HOST_PORT: 3000
+      DB_HOST_PORT: 3306
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
@@ -20,10 +20,6 @@ services:
       - "3306:3306"
     expose:
       - "3306"
-    command: --default-authentication-plugin=mysql_native_password
-    environment:
-        - MYSQL_ROOT_PASSWORD=${DB_PASSWORD} # TODO: le mot de passe peut-être uniquement secret il n'est pas modifié avec cette variable d'environnement et je sais pas pourquoi
-        - MYSQL_DATABASE=${DB_NAME}
     volumes:
       - db-data:/var/lib/mysql
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql # Mount the init.sql file
