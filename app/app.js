@@ -10,7 +10,7 @@ const app = express()
 // TODO: cookie aussi à regarder !
 
 app.use(express.json()); // TODO : A ENLEVER SUREMENT PEUT ETRE PK PAS
-app.use(express.urlencoded({ extended: false })); // TODO : A ENLEVER SUREMENT PEUT ETRE PK PAS
+app.use(express.urlencoded({ extended: true })); // permet de parser les requêtes POST avec un body de type application/x-www-form-urlencoded
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
