@@ -24,6 +24,10 @@ body {
     margin-top: 0;
 }
 
+.signup-form h2 {
+    margin-top: 0;
+}
+
 .form-group {
     margin-bottom: 20px;
 }
