@@ -4,9 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign up</title>
-    <link rel="stylesheet" href="./stylesheet/auth.css">
+    <link rel="stylesheet" href="/stylesheet/auth.css">
+    <link rel="stylesheet" href="/stylesheet/header.css">
+
 </head>
 <body>
+<header>
+    <a href="/home" class="brand-logo">Camagru</a>
+    <div class="header-links">
+        <a href="/login">Login</a>
+        <a href="/signup">Sign Up</a>
+    </div>
+    <div class="user-info" style="display: none;">
+        <span>Welcome, <a href="/profile">Username</a></span>
+        <a href="/logout">Logout</a>
+    </div>
+</header>
+<div class="main-content">
 <div class="auth-container">
     <form action="/path-to-your-login-handler" method="POST" class="signup-form">
         <h2>Sign up</h2>
@@ -24,6 +38,7 @@
         </div>
         <button type="submit">Sign in</button>
     </form>
+</div>
 </div>
 <script src="../script/signup.js"></script>
 </body>

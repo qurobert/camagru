@@ -1,0 +1,33 @@
+/* styles.css */
+
+body {
+    margin: 0;
+    padding: 0;
+    /* Add other body styles */
+}
+
+header {
+    background-color: #333; /* Dark background for the header */
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+header a.brand-logo {
+    margin-left: 0;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.header-links, .user-info {
+    display: flex;
+    align-items: center;
+}
