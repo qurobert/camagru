@@ -1,8 +1,8 @@
 import knex from "./knexfile.js";
 
-export default class User {
-    static async findUser(email, password) {
-        return knex('Users').select('*')
+export default class UserModel {
+    static async findOne(email) {
+        return knex('Users').select('*').where({email}).first()
     }
 
     static async register(email, password) {
