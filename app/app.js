@@ -3,7 +3,8 @@ import 'express-async-errors';
 import indexRouter from './routes/indexRouter.js'
 import usersRouter from './routes/userRouter.js'
 import morgan from "morgan";
-import {errorLogger, errorMiddleware} from "./middlewares/errorMiddleware.js";
+import {globalErrorLogger, globalErrorMiddleware} from "./middlewares/globalErrorMiddleware.js";
+import {error404} from "./errors/error404.js";
 // import {globalErrorMiddleware} from "./middlewares/errorMiddleware.js";
 
 const app = express()
@@ -19,8 +20,9 @@ app.use("/users", usersRouter);
 
 // Custom error handling middleware
 app.use(
-	errorLogger,
-	errorMiddleware
+	error404,
+	globalErrorLogger,
+	globalErrorMiddleware
 );
 
 export default app
