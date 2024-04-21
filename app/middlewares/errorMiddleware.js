@@ -1,13 +1,16 @@
-const ErrorHandler = (err, req, res, next) => {
-	console.log("Middleware Error Hadnling");
-	const status = err.statusCode || 500;
+export const errorMiddleware = (err, req, res, next) => {
 	const message = err.message || 'Something went wrong';
-	res.status(status).json({
-		success: false,
-		status: status,
-		message: message,
-		stack: process.env.NODE_ENV === 'development' ? err.stack : {}
-	})
-}
+	const status = err.status || 500;
 
-export default ErrorHandler
+	res.status(status).json({
+		status,
+		message
+	});
+};
+
+export const errorLogger = (err, req, res, next) => {
+	console.error('>>>>>>>>>>>>>>>>>>');
+	console.error(err);
+	console.error('>>>>>>>>>>>>>>>>>>');
+	next(err);
+};

@@ -1,8 +1,6 @@
 import express from "express";
 import UserModel from "../models/userModel.js";
 import jwt from "jsonwebtoken";
-import {validationResult} from "express-validator";
-import {authMiddleware} from "../middlewares/authMiddleware.js";
 import {formUserValidator} from "../validators/userValidator.js";
 
 const userRouter = express.Router()
