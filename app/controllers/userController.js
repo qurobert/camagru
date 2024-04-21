@@ -19,10 +19,6 @@ export default class UserController {
 		});
 	}
 
-	_checkUserExist = async (email) => {
-		const userExist = await UserModel.findOne(email);
-		if (userExist) throw new ErrorWithStatus(400, "User already exists");
-	}
 	login = async (req, res) => {
 		const {email, password} = req.body;
 		const user = await UserModel.login(email, password);
@@ -62,11 +58,6 @@ export default class UserController {
 		});
 	}
 
-
-	logout = (req, res) => {
-
-	}
-
 	verifyEmail = (req, res) => {
 
 	}
@@ -94,5 +85,12 @@ export default class UserController {
 
 	resetPassword = (req, res) => {
 
+	}
+
+
+	// Private methods
+	_checkUserExist = async (email) => {
+		const userExist = await UserModel.findOne(email);
+		if (userExist) throw new ErrorWithStatus(400, "User already exists");
 	}
 }

@@ -10,7 +10,6 @@ userRouter.post('/register', emailPasswordValidator(), userController.register);
 userRouter.post('/login', emailPasswordValidator(), userController.login);
 userRouter.get('/user/:id', verifyAuth, userController.getUserById);
 userRouter.get('/me', verifyAuth, userController.getUserConnected);
-userRouter.get('/logout', verifyAuth, userController.logout);
 userRouter.get('/verify', verifyAuth, userController.verifyEmail);
 userRouter.post('/reauth', verifyAuth, userController.reauth);
 userRouter.post('/forgotpass', verifyAuth, userController.forgotPassword);
