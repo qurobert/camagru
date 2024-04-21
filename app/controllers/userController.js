@@ -1,58 +1,67 @@
 import UserModel from "../models/userModel.js";
 import ErrorWithStatus from "../errors/ErrorWithStatus.js";
+import {JWTAccessToken, JWTRefreshToken} from "../helpers/jwt.js";
 
 export default class UserController {
 
 	register = async (req, res) => {
 		const {email, password} = req.body;
-		await this._checkUserExist();
+		await this._checkUserExist(email);
 
-		const user = await UserModel.create(email, password);
-		console.log(user);
-		// return jwt
+		const user = await UserModel.create(email, password)
+		if (!user) throw new Error("User not created");
+
 		return res.status(200).json({
 			status: 200,
-			message: "User created successfully"
+			message: "User created successfully",
+			access_token: JWTAccessToken.sign({email, id: user[0]}),
+			refresh_token: JWTRefreshToken.sign({id: user[0]}),
 		});
-
-		// async (req, res) => {
-		// 	try {
-		//
-		// 		const {email, password} = req.body;
-		// 		const userExist = await UserModel.findOne(email);
-		// 		if (userExist) return res.status(400).send("User already exists");
-		//
-		// 		const user = await UserModel.register(email, password);
-		//
-		// 		const payload_access_token = {email: user.email, id: user.id, verification_status: user.verification_status};
-		// 		const payload_refresh_token = {id: user.id};
-		// 		const accessToken = jwt.sign(payload_access_token, process.env.JWT_ACCESS_TOKEN, {expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES});
-		// 		const refreshToken = jwt.sign(payload_refresh_token, process.env.JWT_REFRESH_TOKEN, {expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES});
-		//
-		// 		res.status(201).json({accessToken, refreshToken});
-		// 	} catch (e) {
-		// 		res.status(500).send("Error in Registering")
-		// 	}
-		// })
 	}
 
 	_checkUserExist = async (email) => {
-		// const userExist = await UserModel.findOne(email); // TODO: does not work
-		// if (userExist) throw new Error("User already exists");
+		const userExist = await UserModel.findOne(email);
+		if (userExist) throw new ErrorWithStatus(400, "User already exists");
+	}
+	login = async (req, res) => {
+		const {email, password} = req.body;
+		const user = await UserModel.login(email, password);
+
+		return res.status(200).json({
+			status: 200,
+			message: "User logged in successfully",
+			access_token: JWTAccessToken.sign({email, id: user.id}),
+			refresh_token: JWTRefreshToken.sign({id: user.id}),
+		});
 	}
 
 	getUserConnected = (req, res) => {
+		const user = req.user;
+		return res.status(200).json({
+			status: 200,
+			message: "User connected",
+			user: {
+				id: user.id,
+				email: user.email,
+			}
+		});
 	}
 
 	getUserById = (req, res) => {
+		const {id} = req.params;
+		const user = UserModel.findById(id);
+		if (!user) throw new ErrorWithStatus(404, "User not found");
 
+		return res.status(200).json({
+			status: 200,
+			message: "User found",
+			user: {
+				id: user.id,
+				email: user.email,
+			}
+		});
 	}
 
-
-
-	login = (req, res) => {
-
-	}
 
 	logout = (req, res) => {
 

@@ -1,18 +1,19 @@
 import express from "express";
 import {emailPasswordValidator} from "../validators/userValidator.js";
 import UserController from "../controllers/userController.js";
+import {verifyAuth} from "../middlewares/authMiddleware.js";
 
 const userRouter = express.Router();
 const userController = new UserController();
 
 userRouter.post('/register', emailPasswordValidator(), userController.register);
 userRouter.post('/login', emailPasswordValidator(), userController.login);
-userRouter.get('/logout', userController.logout);
-userRouter.get('/verify', userController.verifyEmail);
-userRouter.post('/reauth', userController.reauth);
-userRouter.post('/forgotpass', userController.forgotPassword);
-userRouter.post('/resetpass', userController.resetPassword);
-userRouter.get('/me', userController.getUserConnected);
-userRouter.get('/:id', userController.getUserById);
+userRouter.get('/user/:id', verifyAuth, userController.getUserById);
+userRouter.get('/me', verifyAuth, userController.getUserConnected);
+userRouter.get('/logout', verifyAuth, userController.logout);
+userRouter.get('/verify', verifyAuth, userController.verifyEmail);
+userRouter.post('/reauth', verifyAuth, userController.reauth);
+userRouter.post('/forgotpass', verifyAuth, userController.forgotPassword);
+userRouter.post('/resetpass', verifyAuth, userController.resetPassword);
 
 export default userRouter

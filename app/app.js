@@ -5,7 +5,6 @@ import usersRouter from './routes/userRouter.js'
 import morgan from "morgan";
 import {globalErrorLogger, globalErrorMiddleware} from "./middlewares/globalErrorMiddleware.js";
 import {error404} from "./errors/error404.js";
-// import {globalErrorMiddleware} from "./middlewares/errorMiddleware.js";
 
 const app = express()
 
