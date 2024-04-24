@@ -7,8 +7,13 @@ export function verifyAuth(req, res, next) {
     if (token == null) return res.sendStatus(401);
 
 	JWTAccessToken.verify(token, (err, user) => {
-		if (err) return res.sendStatus(403);
-
+		if (err) {
+			const status = err.name === 'TokenExpiredError' ? 401 : 403
+			return res.status(status).json({
+				status,
+				message: status === 401 ? 'Token expired' : 'Invalid token'
+			});
+		}
 		req.user = user;
 		next();
 	})

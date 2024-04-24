@@ -18,8 +18,26 @@ export default class UserModel {
         return knex('Users').insert({
             email,
             password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)),
-            verify_email: false
+            verify_email: false,
+            code_verify_email: null,
+            code_password_reset: null
         })
+    }
+
+    static async validate_email(email) {
+        return knex('Users').where({email}).update({verify_email: true, code_verify_email: null})
+    }
+
+    static async updateEmailCode(email, code) {
+        return knex('Users').where({email}).update({code_verify_email: code})
+    }
+
+    static async updatePasswordCode(email, code) {
+        return knex('Users').where({email}).update({code_password_reset: code})
+    }
+
+    static async updatePassword(email, password) {
+        return knex('Users').where({email}).update({password: bcrypt.hashSync(password, bcrypt.genSaltSync(10))})
     }
 
     static async login(email, password) {

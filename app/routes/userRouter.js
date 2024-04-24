@@ -1,5 +1,11 @@
 import express from "express";
-import {emailPasswordValidator} from "../validators/userValidator.js";
+import {
+	codeEmailValidator,
+	emailPasswordValidator,
+	emailValidator,
+	refreshTokenValidator,
+	resetPassValidator
+} from "../validators/userValidator.js";
 import UserController from "../controllers/userController.js";
 import {verifyAuth} from "../middlewares/authMiddleware.js";
 
@@ -10,9 +16,10 @@ userRouter.post('/register', emailPasswordValidator(), userController.register);
 userRouter.post('/login', emailPasswordValidator(), userController.login);
 userRouter.get('/user/:id', verifyAuth, userController.getUserById);
 userRouter.get('/me', verifyAuth, userController.getUserConnected);
-userRouter.get('/verify', verifyAuth, userController.verifyEmail);
-userRouter.post('/reauth', verifyAuth, userController.reauth);
-userRouter.post('/forgotpass', verifyAuth, userController.forgotPassword);
-userRouter.post('/resetpass', verifyAuth, userController.resetPassword);
+userRouter.post('/reauth', verifyAuth, refreshTokenValidator(), userController.reauth);
+userRouter.post('/verify', verifyAuth, codeEmailValidator(), userController.verifyEmail);
+userRouter.post('/sendverify', verifyAuth, emailValidator(), userController.sendVerificationEmail);
+userRouter.post('/forgotpass', verifyAuth, emailValidator(), userController.forgotPassword);
+userRouter.post('/resetpass', verifyAuth, resetPassValidator(), userController.resetPassword);
 
 export default userRouter
