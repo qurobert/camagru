@@ -47,8 +47,4 @@ export default class UserModel {
         return user;
     }
 
-    static async verify_email(email) {
-        // return knex('Users').where({email}).update({verify_email: true})
-    }
-
 }
