@@ -42,6 +42,15 @@ services:
       - "8080:80"
     depends_on:
       - db
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+    volumes:
+      - ./nginx/public:/usr/share/nginx/html:ro
+      - ./nginx/config:/etc/nginx/conf.d:ro
 volumes:
   db-data:
 
