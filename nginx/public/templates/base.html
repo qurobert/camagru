@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camagru - Your Social Photo Editor</title>
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+    <header>
+        <a href="/home" class="brand-logo">Camagru</a>
+        <div class="header-links">
+            <!-- These links are shown when the user is not logged in -->
+            <a href="/login">Login</a>
+            <a href="/signup">Sign Up</a>
+        </div>
+        <div class="user-info" style="display: none;">
+            <!-- These elements are shown when the user is logged in -->
+            <span>Welcome, <a href="/profile">Username</a></span>
+            <a href="/logout">Logout</a>
+        </div>
+    </header>
+    <main id="content" class="main-content">
+
+    </main>
+    <footer>
+        Footer
+    </footer>
+    <script src="/js/router.js"></script>
+</body>
+</html>
