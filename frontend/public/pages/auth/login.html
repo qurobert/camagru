@@ -1,18 +1,21 @@
 <div class="container col-sm-12 col-md-6 col-lg-5">
     <div class="row justify-content-center">
-        <form action="/path-to-your-login-handler" method="POST" class="p-4 border rounded">
-            <h2 class="mb-4 text-center">Login</h2>
+        <p class="alert alert-warning mt-4" style="display: none;" id="alertSignup">
+            Please enter valid information
+        </p>
+        <form class="m-4 border rounded" id="login-form">
+            <h2 class="mt-4 text-center">Login</h2>
             <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" id="username" name="username" class="form-control" required>
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" name="email" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" id="password" name="password" class="form-control" required>
             </div>
-            <button type="submit" class="btn btn-primary btn-block mb-3 col-12">Login</button>
+            <button type="submit" class="btn btn-primary btn-block mb-4 col-12">Login</button>
             <p class="text-center">
-                Forgot your password? <a href="/path-to-reset-password">Reset it here</a>.
+                Forgot your password? <a href="/forgot-password">Reset it here</a>.
             </p>
         </form>
     </div>
