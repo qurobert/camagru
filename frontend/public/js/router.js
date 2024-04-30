@@ -31,6 +31,7 @@ const router = {
 	"/profile": {
 		pathView: createPathView("profile"),
 		protected_route: true,
+		pathScript: "./js/profile.js",
 	},
 	"/email-verification": {
 		pathView: createPathView("auth/email-verification"),
