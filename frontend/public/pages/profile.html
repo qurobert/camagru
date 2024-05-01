@@ -1,27 +1,22 @@
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-12 col-md-8 border border-primary">
-            <div class="display-cover">
-                <video autoplay></video>
-                <canvas class="d-none"></canvas>
-
-                <div class="video-options">
-                    <select name="" id="" class="custom-select">
-                        <option value="">Select camera</option>
-                    </select>
-                </div>
-
-                <img class="screenshot-image d-none" alt="">
-
-                <div class="controls">
-                    <button class="btn btn-danger play" title="Play"><i data-feather="play-circle"></i></button>
-                    <button class="btn btn-info pause d-none" title="Pause"><i data-feather="pause"></i></button>
-                    <button class="btn btn-outline-success screenshot d-none" title="ScreenShot"><i data-feather="image"></i></button>
-                </div>
+<div class="row w-100" style="flex: 1;">
+    <div class="col-12 col-xl-8 d-flex justify-content-center">
+        <div class="container-lg my-auto d-flex flex-column align-items-center">
+            <video autoplay class="bg bg-black col-12 my-4 rounded"></video>
+            <div class="d-flex justify-content-between align-items-center video-options">
+                <i class="iconoir-video-camera fs-4"></i>
+                <select name="" id="" class="form-select border-0">
+                    <option value="">Select camera</option>
+                </select>
             </div>
+                <div class="controls" style="display: none;">
+                    <button class="btn btn-danger play" title="Play"><i class="iconoir-play-solid"></i></button>
+                    <button class="btn btn-info pause" title="Pause"><i class="iconoir-pause-solid"></i></button>
+                    <button class="btn btn-outline-success screenshot" title="ScreenShot"><i class="iconoir-screenshot"></i></button>
+                </div>
         </div>
-        <div class="col-sm-12 col-md-4 border border-primary">
-            Sidebar
-        </div>
+    </div>
+    <div class="col-12 col-xl-4 border border-bottom-0">
+        <img class="w-100 image" src="https://images.unsplash.com/photo-1483104879057-379b6c2fe5a2?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
+        <img class="w-100 image" src="https://images.unsplash.com/photo-1714415573193-1c6ac4c6674b?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"  alt="">
     </div>
 </div>

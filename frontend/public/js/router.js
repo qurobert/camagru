@@ -32,10 +32,10 @@ const router = {
 		pathView: createPathView("profile"),
 		protected_route: true,
 		pathScript: "./js/profile.js",
+		pathCss: "./css/profile.css"
 	},
 	"/email-verification": {
 		pathView: createPathView("auth/email-verification"),
-		// pathScript: "./js/auth/email-verification.js",
 	},
 	"/404": {
 		pathView: createPathView("error/404"),
