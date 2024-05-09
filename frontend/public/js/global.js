@@ -35,6 +35,18 @@ export function getRefreshToken() {
 	return localStorage.getItem('refresh_token');
 }
 
+export function fetchWithToken(url, options) {
+	const token = getAccessToken();
+	if (token) {
+		options.headers = {
+			...options.headers,
+			Authorization: `Bearer ${token}`,
+			'Content-Type': 'application/json'
+		}
+	}
+	return fetch(url_api + url, options);
+}
+
 // AUTHENTICATION
 export function isConnected() {
 	const token = getAccessToken();
