@@ -30,8 +30,8 @@ export default class UserController {
 		return res.json({
 			status: 200,
 			message: "User logged in successfully",
-			accessToken: JWTAccessToken.sign({email, id: user.id}),
-			refreshToken: JWTRefreshToken.sign({id: user.id}),
+			access_token: JWTAccessToken.sign({email, id: user.id}),
+			refresh_token: JWTRefreshToken.sign({id: user.id}),
 		});
 	}
 
