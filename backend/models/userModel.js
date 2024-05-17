@@ -6,17 +6,21 @@ export default class UserModel {
         // this.knex = knex('Users')
     }
 
-    static async findOne(email) {
+    static async findOneByEmail(email) {
         return knex('Users').select('*').where('email', email).first()
+    }
+    static async findOneByUsername(username) {
+        return knex('Users').select('*').where('username', username).first()
     }
 
     static async findById(id) {
         return knex('Users').select('*').where('id', id).first()
     }
 
-    static async create(email, password) {
+    static async create(email, username, password) {
         return knex('Users').insert({
             email,
+            username,
             password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)),
             verify_email: false,
             code_verify_email: null,

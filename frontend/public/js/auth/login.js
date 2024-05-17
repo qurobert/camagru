@@ -1,5 +1,5 @@
 const form = document.getElementById('login-form');
-import {redirectTo, setToken, url_api} from "../global.js";
+import {redirectTo, sendMailVerification, setToken, setUserInfo, url_api} from "../global.js";
 
 form.addEventListener('submit', async (e) => {
 	e.preventDefault();
@@ -20,7 +20,13 @@ form.addEventListener('submit', async (e) => {
 		.then((data) => {
 			if (data.status === 200) {
 				setToken(data);
-				redirectTo('/profile');
+				setUserInfo(data.user);
+				if (data.verify_email === 0) {
+					sendMailVerification(email);
+					redirectTo('/email-verification');
+				}
+				else
+					redirectTo('/profile');
 			}
 		})
 })

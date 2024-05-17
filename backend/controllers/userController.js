@@ -7,10 +7,10 @@ import {generateVerificationCode} from "../helpers/generateVerificationCode.js";
 export default class UserController {
 
 	register = async (req, res) => {
-		const {email, password} = req.body;
-		await this._checkUserExist(email);
+		const {email, username, password} = req.body;
+		await this._checkUserExist(email, username);
 
-		const user = await UserModel.create(email, password);
+		const user = await UserModel.create(email, username, password);
 		if (!user) throw new Error("User not created");
 
 		await this._sendEmailCodeAndStoreInDb(email);
@@ -18,31 +18,34 @@ export default class UserController {
 		return res.json({
 			status: 200,
 			message: "User created successfully",
-			access_token: JWTAccessToken.sign({email, id: user[0]}),
+			access_token: JWTAccessToken.sign({email, id: user[0], username}),
 			refresh_token: JWTRefreshToken.sign({id: user[0]}),
+			verify_email: 0
 		});
 	}
 
 	login = async (req, res) => {
 		const {email, password} = req.body;
 		const user = await UserModel.login(email, password);
-
 		return res.json({
 			status: 200,
 			message: "User logged in successfully",
-			access_token: JWTAccessToken.sign({email, id: user.id}),
+			access_token: JWTAccessToken.sign({email, id: user.id, username: user.username}),
 			refresh_token: JWTRefreshToken.sign({id: user.id}),
+			verify_email: user.verify_email
 		});
 	}
 
-	getUserConnected = (req, res) => {
-		const user = req.user;
+	getUserConnected = async (req, res) => {
+		const user = await UserModel.findById(req.user.id);
 		return res.json({
 			status: 200,
 			message: "User connected",
 			user: {
 				id: user.id,
 				email: user.email,
+				username: user.username,
+				verify_email: user.verify_email
 			}
 		});
 	}
@@ -58,6 +61,7 @@ export default class UserController {
 			user: {
 				id: user.id,
 				email: user.email,
+				username: user.username,
 			}
 		});
 	}
@@ -77,6 +81,8 @@ export default class UserController {
 	sendVerificationEmail = async (req, res) => {
 		const {email} = req.body;
 		await this._sendEmailCodeAndStoreInDb(email);
+		const user = await UserModel.findOneByEmail(email);
+		if (!user) throw new ErrorWithStatus(404, "User not found");
 		res.json({
 			status: 200,
 			message: "Email sent",
@@ -116,7 +122,7 @@ export default class UserController {
 
 	resetPassword = async (req, res) => {
 		const {code, password} = req.body;
-		const user = await UserModel.findOne(req.user.email);
+		const user = await UserModel.findOneByEmail(req.user.email);
 		if (user.code_password_reset !== code) throw new ErrorWithStatus(400, "Code verification is not valid");
 		await UserModel.updatePassword(req.user.email, password);
 		res.json({
@@ -127,9 +133,9 @@ export default class UserController {
 
 
 	// Private methods
-	_checkUserExist = async (email) => {
-		const userExist = await UserModel.findOne(email);
-		if (userExist) throw new ErrorWithStatus(400, "User already exists");
+	_checkUserExist = async (email, username) => {
+		if (await UserModel.findOneByEmail(email) || await UserModel.findOneByUsername(username))
+			throw new ErrorWithStatus(400, "User already exists");
 	}
 
 	_sendEmailCodeAndStoreInDb = async (email) => {

@@ -18,7 +18,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./backend:/usr/src/backend
+      - ./backend:/usr/src/app
   frontend:
     build: frontend
     ports:
