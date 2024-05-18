@@ -50,6 +50,12 @@ const router = {
 	"/404": {
 		pathView: createPathView("error/404"),
 	},
+	"/settings": {
+		pathView: createPathView("settings"),
+		pathScript: "./js/settings.js",
+		pathCss: "./css/auth.css",
+		protected_route: true,
+	},
 }
 
 function createPathView(filename) {

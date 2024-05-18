@@ -9,9 +9,11 @@ export function refreshNavLink(isItConnected) {
 	const loginLink = document.getElementById('login-link');
 	const signupLink = document.getElementById('signup-link');
 	const profileLink = document.getElementById('profile-link');
+	const settingsLink = document.getElementById('settings-link');
 	const logoutLink = document.getElementById('logout-link');
 
 	profileLink.style.display = isItConnected ? 'block' : 'none';
+	settingsLink.style.display = isItConnected ? 'block' : 'none';
 	logoutLink.style.display = isItConnected ? 'block' : 'none';
 	loginLink.style.display = isItConnected ? 'none' : 'block';
 	signupLink.style.display = isItConnected ? 'none' : 'block';
