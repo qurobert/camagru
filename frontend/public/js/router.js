@@ -1,4 +1,10 @@
-import {isConnected, redirectProfileConnected, redirectTo, refreshNavLink} from "./global.js";
+import {
+	isConnected,
+	isVerifyEmail,
+	redirectProfileConnected,
+	redirectTo,
+	refreshNavLink
+} from "./global.js";
 
 // Router
 const router = {
@@ -36,6 +42,8 @@ const router = {
 	},
 	"/email-verification": {
 		pathView: createPathView("auth/email-verification"),
+		pathCss: "./css/auth.css",
+		pathScript: "./js/email-verification.js",
 	},
 	"/404": {
 		pathView: createPathView("error/404"),
@@ -57,18 +65,20 @@ function getFile(pathFile) {
 
 async function loadApp() {
 	await loadPage(window.location.pathname);
-
-	const isItConnected = await isConnected();
-	refreshNavLink(isItConnected);
+	refreshNavLink(await isConnected());
 }
 
-async function loadPage(path) {
+async function loadPage(path)  {
 	const route = router[path];
 
 	unloadScript();
 	unloadCss();
-	if (route && route.protected_route && !(await isConnected())) {
-		redirectTo("/login");
+	if (route && route.protected_route && !await isConnected()) {
+		await redirectTo("/login");
+		return ;
+	}
+	if (route && route.protected_route && !await isVerifyEmail()) {
+		await redirectTo("/email-verification");
 		return ;
 	}
 
@@ -81,6 +91,8 @@ async function loadPage(path) {
 }
 
 function loadCss(route) {
+	if (!route || !route.pathCss)
+		return;
 	const css = document.createElement("link");
 	css.rel = "stylesheet";
 	css.href = route.pathCss;

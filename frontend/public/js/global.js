@@ -17,6 +17,12 @@ export function refreshNavLink(isItConnected) {
 	signupLink.style.display = isItConnected ? 'none' : 'block';
 }
 
+export function setUserInfo(user) {
+	sessionStorage.setItem('user', JSON.stringify(user));
+}
+export function getUserInfo() {
+	return JSON.parse(sessionStorage.getItem('user'));
+}
 export function setToken(data) {
 	localStorage.setItem('access_token', data.access_token);
 	localStorage.setItem('refresh_token', data.refresh_token);
@@ -49,36 +55,50 @@ export function fetchWithToken(url, options) {
 
 // AUTHENTICATION
 export function isConnected() {
-	const token = getAccessToken();
-	if (token) {
-		return fetch(url_api + '/users/me', {
-			method: 'GET',
-			headers: {
-				'Content-Type': "application/json",
-				Authorization: `Bearer ${token}`
-			}
-		})
-			.then(response => response.json())
-			.then(data => {
-				sessionStorage.setItem('user', JSON.stringify(data.user));
-				return data.status === 200;
-			})
-			.catch(() => false)
-	}
-	return false;
+	return fetchWithToken('/users/me', {
+		method: 'GET'
+	}).then(response => response.json())
+	.then(data => {
+		if (data.status === 200) {
+			setUserInfo(data.user);
+			return true;
+		}
+		return false
+	})
+	.catch(() => false);
 }
 
-export function logout() {
+export function isVerifyEmail() {
+	return fetchWithToken('/users/me', {
+		method: 'GET'
+	}).then(response => response.json())
+	.then(data => data.user.verify_email === 1)
+	.catch(() => false);
+
+}
+export function sendMailVerification(email) {
+	return fetchWithToken('/users/sendverify', {
+		method: 'POST',
+		body: JSON.stringify({ email })
+	}).then(response => response.json())
+	.then(data => data.status === 200)
+	.catch(() => false);
+}
+
+export function logout(path= "/") {
 	removeToken();
 	sessionStorage.removeItem('user');
 	refreshNavLink(false);
-	redirectTo('/');
+	redirectTo(path);
 }
 
 export const logoutButton = document.getElementById('logout-button');
 
 if (logoutButton) {
-	logoutButton.addEventListener('click', logout);
+	logoutButton.addEventListener('click', (e) => {
+		e.preventDefault();
+		logout();
+	});
 }
 
 export async function redirectProfileConnected() {

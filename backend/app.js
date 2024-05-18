@@ -13,7 +13,6 @@ app.use(express.json()); // permet de parser les requêtes POST avec un body de 
 app.use(express.urlencoded({ extended: true })); // permet de parser les requêtes POST avec un body de type application/x-www-form-urlencoded
 app.use(morgan('dev')); // Logger Middleware
 app.use(cors()); // Cors Middleware
-
 // Router
 app.use("/", indexRouter);
 app.use("/users", usersRouter);

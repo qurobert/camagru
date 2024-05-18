@@ -1,10 +1,10 @@
 import express from "express";
 import {
 	codeEmailValidator,
-	emailPasswordValidator,
+	loginValidator,
 	emailValidator,
 	refreshTokenValidator,
-	resetPassValidator
+	resetPassValidator, registerValidator
 } from "../validators/userValidator.js";
 import UserController from "../controllers/userController.js";
 import {verifyAuth} from "../middlewares/authMiddleware.js";
@@ -12,8 +12,8 @@ import {verifyAuth} from "../middlewares/authMiddleware.js";
 const userRouter = express.Router();
 const userController = new UserController();
 
-userRouter.post('/register', emailPasswordValidator(), userController.register);
-userRouter.post('/login', emailPasswordValidator(), userController.login);
+userRouter.post('/register', registerValidator(), userController.register);
+userRouter.post('/login', loginValidator(), userController.login);
 userRouter.get('/user/:id', verifyAuth, userController.getUserById);
 userRouter.get('/me', verifyAuth, userController.getUserConnected);
 userRouter.post('/reauth', verifyAuth, refreshTokenValidator(), userController.reauth);

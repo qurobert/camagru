@@ -1,16 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verification Sent</title>
-    <link rel="stylesheet" href="/css/auth.css">
-</head>
-<body>
-<div class="auth-container">
-    <h1>Check Your Email</h1>
-    <p>We've sent a verification link to your email address. Please follow the link to verify your account.</p>
-    <p>If you don't see our email, please check your spam folder or <a href="/signup">try to sign up</a> again.</p>
+<div class="container col-sm-12 col-md-6 col-lg-5">
+    <div class="row justify-content-center">
+        <p class="alert alert-warning mt-4" style="display: none;" id="alertSignup">
+            Check you email to verify your account
+        </p>
+        <form class="m-4 border rounded" id="emailForm">
+            <h2 class="mt-4 text-center">Check your email</h2>
+            <p class="text-center">
+                We've sent a verification link to your email address. Please follow the link to verify your account.<br/>
+                If you don't see our email, please check your spam folder
+            </p>
+            <div class="mb-3">
+                <label for="code" class="form-label">Code</label>
+                <input type="text" id="code" name="code" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block mb-4 col-12">Verify Email</button>
+            <p class="text-center">
+                Didn't receive the email? <a href="/email-verification" id="resendMail">Resend Email</a>.
+            </p>
+        </form>
+    </div>
 </div>
-</body>
-</html>
