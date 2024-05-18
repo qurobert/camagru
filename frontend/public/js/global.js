@@ -78,23 +78,27 @@ export function isVerifyEmail() {
 }
 export function sendMailVerification(email) {
 	return fetchWithToken('/users/sendverify', {
-		method: 'POST'
+		method: 'POST',
+		body: JSON.stringify({ email })
 	}).then(response => response.json())
 	.then(data => data.status === 200)
 	.catch(() => false);
 }
 
-export function logout() {
+export function logout(path= "/") {
 	removeToken();
 	sessionStorage.removeItem('user');
 	refreshNavLink(false);
-	redirectTo('/');
+	redirectTo(path);
 }
 
 export const logoutButton = document.getElementById('logout-button');
 
 if (logoutButton) {
-	logoutButton.addEventListener('click', logout);
+	logoutButton.addEventListener('click', (e) => {
+		e.preventDefault();
+		logout();
+	});
 }
 
 export async function redirectProfileConnected() {
