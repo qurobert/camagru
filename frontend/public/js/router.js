@@ -10,9 +10,11 @@ import {
 const router = {
 	"/": {
 		pathView: createPathView("home"),
+		pathScript: "./js/home.js",
 	},
 	"/home": {
 		pathView: createPathView("home"),
+		pathScript: "./js/home.js",
 	},
 	"/login": {
 		pathView: createPathView("auth/login"),
