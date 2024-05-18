@@ -1,5 +1,5 @@
 import knex from "./knexfile.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 export default class UserModel {
     constructor() {
