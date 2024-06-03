@@ -4,7 +4,6 @@ CREATE TABLE Users (
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     verify_email BOOLEAN DEFAULT FALSE,
-    code_verify_email VARCHAR(255) DEFAULT NULL,
     code_password_reset VARCHAR(255) DEFAULT NULL
 );
 

@@ -20,7 +20,7 @@ emailForm.addEventListener('submit', async (e) => {
 	const data = new FormData(emailForm);
 	const code = data.get('code');
 	console.log("code");
-	const back = await fetchWithToken('/users/verify', {
+	const back = await fetchWithToken('/auth/send-email-verify', {
 		method: 'POST',
 		body: JSON.stringify({
 			code

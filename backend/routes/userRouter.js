@@ -1,13 +1,9 @@
 import express from "express";
 import {
-	codeEmailValidator,
-	emailPasswordValidator,
 	emailValidator,
-	refreshTokenValidator,
 	resetPassValidator
 } from "../validators/userValidator.js";
 import UserController from "../controllers/userController.js";
-import AuthController from "../controllers/authController.js";
 import {verifyAuth} from "../middlewares/authMiddleware.js";
 
 const userRouter = express.Router();

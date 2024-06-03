@@ -79,7 +79,7 @@ export function isVerifyEmail() {
 
 }
 export function sendMailVerification(email) {
-	return fetchWithToken('/users/sendverify', {
+	return fetchWithToken('/auth/send-email-verify', {
 		method: 'POST',
 		body: JSON.stringify({ email })
 	}).then(response => response.json())

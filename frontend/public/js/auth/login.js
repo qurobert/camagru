@@ -6,7 +6,7 @@ form.addEventListener('submit', async (e) => {
 	const formData = new FormData(form);
 	const email = formData.get('email');
 	const password = formData.get('password');
-	fetch(url_api + '/users/login', {
+	fetch(url_api + '/auth/login', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',

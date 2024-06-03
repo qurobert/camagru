@@ -47,6 +47,11 @@ const router = {
 		pathCss: "./css/auth.css",
 		pathScript: "./js/email-verification.js",
 	},
+	"/email-verified": {
+		pathView: createPathView("auth/email-verified"),
+		pathCss: "./css/auth.css",
+		pathScript: "./js/email-verification.js",
+	},
 	"/404": {
 		pathView: createPathView("error/404"),
 	},

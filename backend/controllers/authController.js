@@ -1,18 +1,17 @@
 import UserModel from "../models/userModel.js";
-import {JWTAccessToken, JWTRefreshToken} from "../helpers/jwt.js";
+import {JWT, JWTAccessToken, JWTRefreshToken} from "../helpers/jwt.js";
 import ErrorWithStatus from "../errors/ErrorWithStatus.js";
-import {generateVerificationCode} from "../helpers/generateVerificationCode.js";
 import {sendMail} from "../mail/sendMail.js";
 
 export default class AuthController {
     static async register(req, res) {
-        const {email, password} = req.body;
-        await this._checkUserExist(email);
+        const {email, password, username} = req.body;
+        await AuthController._checkUserExist(email);
 
-        const user = await UserModel.create(email, password);
+        const user = await UserModel.create(email, username, password);
         if (!user) throw new Error("User not created");
 
-        await this._sendEmailCodeAndStoreInDb(email);
+        await AuthController._sendEmailLink(email);
 
         return res.json({
             status: 200,
@@ -36,20 +35,21 @@ export default class AuthController {
     }
 
     static async verifyEmail(req, res) {
-        const {code} = req.body;
-        const user = await UserModel.findById(req.user.id);
-        if (user.code_verify_email !== code) throw new ErrorWithStatus(400, "Code verification is not valid");
+        const {token} = req.query;
+        console.log('token is :', token);
+        JWTAccessToken.verify(token, async (err, emailTokenInfo) => {
+            if (err) return res.sendStatus(403);
 
-        await UserModel.validate_email(user.email);
-        return res.json({
-            status: 200,
-            message: "Email verified",
-        });
+            const user = await UserModel.findById(emailTokenInfo.id);
+            if (!user) return res.sendStatus(403);
+            await UserModel.validate_email(user.email);
+            return res.redirect('http://localhost/email-verified');
+        })
     }
 
     static async sendVerificationEmail(req, res) {
         const {email} = req.body;
-        await this._sendEmailCodeAndStoreInDb(email);
+        await AuthController._sendEmailLink(email);
         res.json({
             status: 200,
             message: "Email sent",
@@ -77,13 +77,15 @@ export default class AuthController {
     }
 
     static async _checkUserExist(email) {
-        const userExist = await UserModel.findOne(email);
+        const userExist = await UserModel.findOneByEmail(email);
         if (userExist) throw new ErrorWithStatus(400, "User already exists");
     }
 
-    static async _sendEmailCodeAndStoreInDb(email) {
-        const code = generateVerificationCode(6);
-        await sendMail(email, "Verify your email - Camagru", "<p>Code verification: " + code + "</p>");
-        await UserModel.updateEmailCode(email, code);
+    static async _sendEmailLink(email) {
+        const user = await UserModel.findOneByEmail(email);
+        const token = JWTAccessToken.sign({id: user.id});
+        const verificationLink = `http://localhost:3000/auth/verify-email?token=${token}`;
+        const emailContent = `<p>Please verify your email by clicking on the following <a href="${verificationLink}">link</a></p>`;
+        await sendMail(email, "Verify your email - Camagru", emailContent);
     }
 }

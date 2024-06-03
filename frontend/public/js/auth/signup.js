@@ -12,7 +12,7 @@ form.addEventListener('submit', function (e) {
 		displayAlert();
 		return;
 	}
-	fetch(url_api + "/users/register", {
+	fetch(url_api + "/auth/register", {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'

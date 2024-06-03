@@ -23,17 +23,12 @@ export default class UserModel {
             username,
             password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)),
             verify_email: false,
-            code_verify_email: null,
             code_password_reset: null
         })
     }
 
     static async validate_email(email) {
-        return knex('Users').where({email}).update({verify_email: true, code_verify_email: null})
-    }
-
-    static async updateEmailCode(email, code) {
-        return knex('Users').where({email}).update({code_verify_email: code})
+        return knex('Users').where({email}).update({verify_email: true})
     }
 
     static async updatePasswordCode(email, code) {
@@ -48,6 +43,7 @@ export default class UserModel {
         const user = await knex('Users').select('*').where('email', email).first()
         if (!user) throw new Error("User not found")
         if (!bcrypt.compareSync(password, user.password)) throw new Error("Invalid password")
+        if (!user.verify_email) throw new Error("Email not verified")
         return user;
     }
 
