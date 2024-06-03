@@ -7,6 +7,7 @@ import authRouter from './routes/authRouter.js'
 import morgan from "morgan";
 import {globalErrorLogger, globalErrorMiddleware} from "./middlewares/globalErrorMiddleware.js";
 import {error404} from "./errors/error404.js";
+import cors from 'cors';
 
 const app = express()
 
@@ -14,6 +15,9 @@ const app = express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
+app.use(cors({
+	origin: 'http://localhost' // Adjust the port if your frontend is on a different one
+}));
 
 // Router
 app.use("/", indexRouter);
