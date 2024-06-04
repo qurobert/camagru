@@ -4,21 +4,31 @@ import fs from 'fs';
 import sharp from 'sharp';
 
 export default class ImageModel {
-    static async create(userId, imagePath) {
+    static async create(userId, overlayPath, backgoundPath) {
         // Process the image with sharp and save the processed image
-        if (!userId || !imagePath) throw new Error('Missing required fields');
-        const filename = path.basename(imagePath);
-        const output = `processed_${filename}`;
-        const outputPath = path.join(path.dirname(imagePath), output);
+        console.log(overlayPath, backgoundPath)
+        if (!userId || !overlayPath || !backgoundPath) throw new Error('Missing required fields');
+        const processedBackgoundPath = path.join('uploads', `processed_background_${Date.now()}.png`);
+        const processedOverlayPath = path.join('uploads', `processed_overlay_${Date.now()}.png`);
+        const outputPath = path.join('uploads', `processed_${Date.now()}.png`);
+        const backgroundBuffer =  await sharp(backgoundPath)
+            .resize(800, 800)
+            .toBuffer();
 
-        await sharp(imagePath)
-            .resize(700, 700) // Example resize, customize as needed
+        const overlayBuffer = await sharp(overlayPath)
+            .resize(800, 800)
+            .ensureAlpha()
+            .composite([{ input: Buffer.from([255, 255, 255, 150]), raw: { width: 1, height: 1, channels: 4 }, tile: true }])
+            .toBuffer();
+
+        await sharp(backgroundBuffer)
+            .composite([{ input: overlayBuffer, blend: 'overlay' }])
             .toFile(outputPath);
 
         // Insert image data into database
         return knex('Images').insert({
             user_id: userId,
-            original_path: imagePath,
+            original_path: "null",
             processed_path: outputPath,
             created_at: new Date(),
         });

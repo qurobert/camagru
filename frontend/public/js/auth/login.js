@@ -18,22 +18,22 @@ form.addEventListener('submit', async (e) => {
 			password
 		}),
 	})
-		.then(response => {
-			if (!response.ok) throw response;
-			return response.json();  // Continue with processing for valid responses
-		})
+		.then(response => response.json())
 		.then(data => {
 			if (data.status === 200) {
 				setToken(data);
-				setUserInfo(data.user);
+				setUserInfo({email});
 				redirectTo('/profile');
+			} else {
+				alert(data.message);
 			}
 		})
 		.catch(async (errorResponse) => {
+			console.log("ERREUR", errorResponse)
 			if (errorResponse.status === 500) {
 				const errorData = await errorResponse.json();
 				if (errorData.message === "Email not verified") {
-					redirectTo('/email-verification');
+					// redirectTo('/email-verification');
 				} else {
 					console.error("Login failed:", errorData.message);
 				}

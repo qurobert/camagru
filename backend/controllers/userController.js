@@ -5,7 +5,7 @@ import {generateVerificationCode} from "../helpers/generateVerificationCode.js";
 
 export default class UserController {
 	static async getUserConnected (req, res) {
-		const user = req.user;
+		const user = await UserModel.findOneByEmail(req.user.email);
 		return res.json({
 			status: 200,
 			message: "User connected",
@@ -13,7 +13,7 @@ export default class UserController {
 				id: user.id,
 				email: user.email,
 				username: user.username,
-				verify_email: user.verify_email
+				verify_email: user.verify_email,
 			}
 		});
 	}
@@ -30,6 +30,7 @@ export default class UserController {
 				id: user.id,
 				email: user.email,
 				username: user.username,
+				verify_email: user.verify_email,
 			}
 		});
 	}

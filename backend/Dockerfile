@@ -32,9 +32,6 @@ COPY . .
 # Expose the port that the application listens on.
 EXPOSE 3000
 
-# Run npm install
-CMD rm -rf node_modules
-CMD npm install
 
 # Run the application.
-CMD npm start
+CMD rm -rf node_modules && npm install && npm start

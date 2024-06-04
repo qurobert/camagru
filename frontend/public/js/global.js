@@ -26,21 +26,21 @@ export function getUserInfo() {
 	return JSON.parse(sessionStorage.getItem('user'));
 }
 export function setToken(data) {
-	localStorage.setItem('access_token', data.access_token);
-	localStorage.setItem('refresh_token', data.refresh_token);
+	localStorage.setItem('accessToken', data.accessToken);
+	localStorage.setItem('refreshToken', data.refreshToken);
 }
 
 export function removeToken() {
-	localStorage.removeItem('access_token');
-	localStorage.removeItem('refresh_token');
+	localStorage.removeItem('accessToken');
+	localStorage.removeItem('refreshToken');
 }
 
 export function getAccessToken() {
-	return localStorage.getItem('access_token');
+	return localStorage.getItem('accessToken');
 }
 
 export function getRefreshToken() {
-	return localStorage.getItem('refresh_token');
+	return localStorage.getItem('refreshToken');
 }
 
 export function fetchWithToken(url, options) {
