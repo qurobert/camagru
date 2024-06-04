@@ -1,3 +1,4 @@
+
 const title = document.getElementById('title');
 const chooseImage = document.getElementById('chooseImage');
 const chooseFilter = document.getElementById('chooseFilter');
@@ -144,19 +145,33 @@ validButton.onclick = () => {
 	}
 	alert("Image uploaded !");
 	initProfilePage()
-	// fetchWithToken('/image/create_image', {
-	// 	method: 'POST',
-	// 	body: JSON.stringify({
-	// 		image: imageWithoutFilter,
-	// 		filter: imageFilter.src
-	// 	})
-	// })
-	// 	.then(response => response.json())
-	// 	.then(data => {
-	// 		if (data.status === 200) {
-	// 			const previewImage = document.getElementById('previewImage');
-	// 			previewImage.src = data.image;
-	// 		}
-	// 	})
+	const token = localStorage.getItem('accessToken');
+	const formData = new FormData();
+	formData.append('image', imageWithoutFilter);
+	formData.append('filter', imageFilter.src);
+	async function uploadImage() {
+		try {
+			const response = await fetch('http://localhost:3000/images/create', {
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+				body: formData,
+			});
+
+			const data = await response.json();
+
+			if (response.status === 201) {
+				const previewImage = document.getElementById('previewImage');
+				previewImage.src = data.image;
+			} else {
+				console.error(data.status, data.message);
+			}
+		} catch (error) {
+			console.error('Error uploading image:', error);
+		}
+	}
+
+	uploadImage();
 }
 

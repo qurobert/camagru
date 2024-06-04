@@ -6,6 +6,7 @@ import {generateVerificationCode} from "../helpers/generateVerificationCode.js";
 export default class UserController {
 	static async getUserConnected (req, res) {
 		const user = await UserModel.findOneByEmail(req.user.email);
+		if (!user) throw new ErrorWithStatus(404, "User not found");
 		return res.json({
 			status: 200,
 			message: "User connected",
@@ -48,7 +49,7 @@ export default class UserController {
 
 	static async resetPassword(req, res) {
 		const {code, password} = req.body;
-		const user = await UserModel.findOne(req.user.email);
+		const user = await UserModel.findOneByEmail(req.user.email);
 		if (user.code_password_reset !== code) throw new ErrorWithStatus(400, "Code verification is not valid");
 		await UserModel.updatePassword(req.user.email, password);
 		res.json({

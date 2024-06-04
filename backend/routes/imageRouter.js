@@ -6,11 +6,12 @@ import {verifyAuth} from "../middlewares/authMiddleware.js";
 const imageRouter = express.Router();
 const upload = multer({ dest: 'uploads/' });
 
-imageRouter.post('/', verifyAuth, upload.fields([
-    { name: 'background', maxCount: 1 },
-    { name: 'overlay', maxCount: 1 }
-]), ImageController.create);
 imageRouter.get('/', verifyAuth, ImageController.getAll);
+imageRouter.post('/create', verifyAuth, upload.fields([
+    { name: 'image', maxCount: 1 },
+    { name: 'filter', maxCount: 1 }
+]), ImageController.create);
 imageRouter.delete('/delete/:id', verifyAuth, ImageController.delete);
+
 
 export default imageRouter;

@@ -1,4 +1,4 @@
-import {fetchWithToken, getUserInfo, logout, redirectTo, removeToken, sendMailVerification} from "./global.js";
+import {getUserInfo, logout, redirectTo, removeToken, sendMailVerification} from "./global.js";
 
 const resendMail = document.getElementById('resendMail');
 
@@ -6,7 +6,7 @@ resendMail.addEventListener('click', async (e) => {
 	e.preventDefault();
 	const user = getUserInfo();
 	if (!await sendMailVerification(user.email)) {
-		logout("/login");
+		// logout("/login");
 		alert('Error send mail');
 	}
 	else {
@@ -14,21 +14,16 @@ resendMail.addEventListener('click', async (e) => {
 	}
 })
 
-const emailForm = document.getElementById('emailForm');
-emailForm.addEventListener('submit', async (e) => {
-	e.preventDefault();
-	const data = new FormData(emailForm);
-	const code = data.get('code');
-	console.log("code");
-	const back = await fetchWithToken('/auth/send-email-verify', {
-		method: 'POST',
-		body: JSON.stringify({
-			code
-		})
-	})
-	if (back.status === 200) {
-		redirectTo('/profile')
-		alert('Email verified');
-	} else
-		alert('Invalid code');
-})
+// const emailForm = document.getElementById('emailForm');
+// emailForm.addEventListener('submit', async (e) => {
+// 	e.preventDefault();
+// 	const data = new FormData(emailForm);
+// 	const back = await fetch('/auth/send-email-verify', {
+// 		method: 'POST',
+// 	})
+// 	if (back.status === 200) {
+// 		redirectTo('/profile')
+// 		alert('Email verified');
+// 	} else
+// 		alert('Invalid code');
+// })

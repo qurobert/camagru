@@ -31,7 +31,8 @@ export default class ImageModel {
             original_path: "null",
             processed_path: outputPath,
             created_at: new Date(),
-        });
+        })
+            // .returning('id') for the front end
     }
 
     static async findAllByUserId(userId) {

@@ -36,7 +36,6 @@ export default class AuthController {
 
     static async verifyEmail(req, res) {
         const {token} = req.query;
-        console.log('token is :', token);
         JWTAccessToken.verify(token, async (err, emailTokenInfo) => {
             if (err) return res.sendStatus(403);
 
@@ -83,6 +82,8 @@ export default class AuthController {
 
     static async _sendEmailLink(email) {
         const user = await UserModel.findOneByEmail(email);
+        if (!user)
+            throw new ErrorWithStatus(404, "User not found");
         const token = JWTAccessToken.sign({id: user.id});
         const verificationLink = `http://localhost:3000/auth/verify-email?token=${token}`;
         const emailContent = `<p>Please verify your email by clicking on the following <a href="${verificationLink}">link</a></p>`;
