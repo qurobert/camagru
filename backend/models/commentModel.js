@@ -15,9 +15,4 @@ export default class CommentModel {
         if (!imageId) throw new Error('Missing required fields');
         return knex('Comments').select('*').where('image_id', imageId);
     }
-
-    static async deleteById(commentId) {
-        if (!commentId) throw new Error('Missing required fields');
-        return knex('Comments').where('id', commentId).del();
-    }
 }

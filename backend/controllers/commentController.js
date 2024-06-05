@@ -13,21 +13,11 @@ export default class CommentController {
         }
     }
 
-    static async getAll(req, res) {
+    static async getAllForImage(req, res) {
         try {
             const { imageId } = req.params;
             const comments = await CommentModel.findAllByImageId(imageId);
             res.status(200).json(comments);
-        } catch (err) {
-            res.status(500).send(err.message);
-        }
-    }
-
-    static async delete(req, res) {
-        try {
-            const { id } = req.params;
-            await CommentModel.deleteById(id);
-            res.status(200).send("Comment deleted successfully.");
         } catch (err) {
             res.status(500).send(err.message);
         }

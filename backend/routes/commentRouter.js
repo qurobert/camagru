@@ -6,7 +6,6 @@ import {verifyAuth} from "../middlewares/authMiddleware.js";
 const commentRouter = express.Router();
 
 commentRouter.post('/', verifyAuth, CommentController.create);
-commentRouter.get('/:imageId', verifyAuth, CommentController.getAll);
-commentRouter.delete('/:id', verifyAuth, CommentController.delete);
+commentRouter.get('/:imageId', CommentController.getAllForImage);
 
 export default commentRouter;

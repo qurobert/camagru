@@ -6,7 +6,8 @@ import {verifyAuth} from "../middlewares/authMiddleware.js";
 const likeRouter = express.Router();
 
 likeRouter.post('/', verifyAuth, LikeController.create);
-likeRouter.get('/:imageId', verifyAuth, LikeController.getAll);
-likeRouter.delete('/:id', verifyAuth, LikeController.delete);
+likeRouter.get('/:imageId', LikeController.getAll);
+//id of the image and not the like seems more simple for the front
+likeRouter.delete('/:id', verifyAuth, LikeController.deleteByImageId);
 
 export default likeRouter;

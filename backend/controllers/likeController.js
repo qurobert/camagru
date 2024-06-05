@@ -23,10 +23,10 @@ export default class LikeController {
         }
     }
 
-    static async delete(req, res) {
+    static async deleteByImageId(req, res) {
         try {
             const { id } = req.params;
-            await LikeModel.deleteById(id);
+            await LikeModel.deleteByImageId(id,req.user.id);
             res.status(200).send("Like removed successfully.");
         } catch (err) {
             res.status(500).send(err.message);
