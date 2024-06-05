@@ -1,5 +1,6 @@
 // backend/models/likeModel.js
 import knex from "./knexfile.js";
+import UserModel from "./userModel.js";
 
 export default class LikeModel {
     static async create(imageId, userId) {
@@ -7,6 +8,7 @@ export default class LikeModel {
         // If like is already present, return an error
         const existingLike = await knex('Likes').where('image_id', imageId).andWhere('user_id', userId);
         if (existingLike.length > 0) throw new Error('Like already exists');
+        await UserModel.notifyUser(userId, 'like');
         return knex('Likes').insert({
             image_id: imageId,
             user_id: userId

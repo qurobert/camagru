@@ -57,4 +57,25 @@ export default class UserController {
 			message: "Password reset",
 		});
 	}
+
+	static async updateUser(req, res) {
+		const { email, username, password, confirm_password, notification } = req.body;
+		if (email) {
+			await UserModel.updateEmail(req.user.id, email);
+		}
+		if (username) {
+			await UserModel.updateUsername(req.user.id, username);
+		}
+		if (password) {
+			if (password !== confirm_password) throw new ErrorWithStatus(400, "Passwords do not match");
+			await UserModel.updatePassword(req.user.email, password);
+		}
+		if (notification !== undefined) {
+			await UserModel.updateNotification(req.user.id, notification);
+		}
+		res.json({
+			status: 200,
+			message: "User updated",
+		});
+	}
 }

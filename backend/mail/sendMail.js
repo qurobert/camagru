@@ -11,7 +11,6 @@ export const sendMail = async (to, subject, html) => {
 		html
 	};
 
-	console.log(config);
 	return transporter.sendMail(mailOptions, (error, info) => {
 		if (error) {
 			return console.log(error);

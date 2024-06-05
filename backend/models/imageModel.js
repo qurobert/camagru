@@ -49,7 +49,6 @@ export default class ImageModel {
         images = await knex('Images').select('*').limit(limitPerPage).offset(offset);
         for (let image of images) {
             image.comments = await CommentModel.findAllByImageId(image.id);
-            console.log('image likes :', image.likes)
             image.likes = await LikeModel.findAllByImageId(image.id);
         }
         return images

@@ -1,9 +1,11 @@
 // backend/models/commentModel.js
 import knex from "./knexfile.js";
+import UserModel from "./userModel.js";
 
 export default class CommentModel {
     static async create(imageId, userId, commentText) {
         if (!imageId || !userId || !commentText) throw new Error('Missing required fields');
+        await UserModel.notifyUser(userId, 'comment');
         return knex('Comments').insert({
             image_id: imageId,
             user_id: userId,

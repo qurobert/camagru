@@ -1,14 +1,12 @@
 import knex from "./knexfile.js";
 import bcrypt from "bcryptjs";
+import {sendMail} from "../mail/sendMail.js";
 
 export default class UserModel {
-    constructor() {
-        // this.knex = knex('Users')
-    }
-
     static async findOneByEmail(email) {
         return knex('Users').select('*').where('email', email).first()
     }
+
     static async findOneByUsername(username) {
         return knex('Users').select('*').where('username', username).first()
     }
@@ -47,4 +45,23 @@ export default class UserModel {
         return user;
     }
 
+    static async notifyUser(userId, notificationType) {
+        const user = await this.findById(userId)
+        if (user.notification) {
+            const text = notificationType === 'like' ? 'Your image has been liked' : 'Your image has been commented'
+            await sendMail(user.email, 'Notification', text)
+        }
+    }
+
+    static async updateEmail(userId, email) {
+        return knex('Users').where('id', userId).update({email})
+    }
+
+    static async updateUsername(userId, username) {
+        return knex('Users').where('id', userId).update({username})
+    }
+
+    static async updateNotification(userId, notification) {
+        return knex('Users').where('id', userId).update({notification})
+    }
 }
