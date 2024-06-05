@@ -34,6 +34,7 @@ export default class UserModel {
     }
 
     static async updatePassword(email, password) {
+        if (!password) return
         return knex('Users').where({email}).update({password: bcrypt.hashSync(password, bcrypt.genSaltSync(10))})
     }
 
@@ -54,14 +55,17 @@ export default class UserModel {
     }
 
     static async updateEmail(userId, email) {
+        if (!email) return
         return knex('Users').where('id', userId).update({email})
     }
 
     static async updateUsername(userId, username) {
+        if (!username) return
         return knex('Users').where('id', userId).update({username})
     }
 
     static async updateNotification(userId, notification) {
+        if (notification === undefined) return
         return knex('Users').where('id', userId).update({notification})
     }
 }
