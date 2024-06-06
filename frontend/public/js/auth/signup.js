@@ -52,7 +52,7 @@ function displayAlert(message) {
 }
 
 function checkPassword(password) {
-	if (!password.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)) {
+	if (!password.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}/)) {
 		alert('Password does not meet the complexity requirements.');
 		return false;
 	}

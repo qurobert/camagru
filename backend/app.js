@@ -12,16 +12,23 @@ import {error404} from "./errors/error404.js";
 import cors from 'cors';
 import path from "path";
 import { fileURLToPath } from 'url';
-
 const app = express()
 
 // Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '50mb'}));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(morgan('dev'));
 app.use(cors({
-	origin: 'http://localhost' // Adjust the port if your frontend is on a different one
+	origin: 'http://localhost',
+	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+	credentials: true,
+	preflightContinue: false,
+	// optionsSuccessStatus: 204
 }));
+
+// Configurer les routes pour répondre aux requêtes préliminaires OPTIONS
+app.options('*', cors());
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

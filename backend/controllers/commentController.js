@@ -6,6 +6,7 @@ export default class CommentController {
         try {
             const { imageId, commentText } = req.body;
             const userId = req.user.id;
+            console.log(imageId, commentText, userId);
             await CommentModel.create(imageId, userId, commentText);
             res.status(201).send("Comment created successfully.");
         } catch (err) {
