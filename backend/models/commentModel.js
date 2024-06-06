@@ -15,6 +15,10 @@ export default class CommentModel {
 
     static async findAllByImageId(imageId) {
         if (!imageId) throw new Error('Missing required fields');
-        return knex('Comments').select('*').where('image_id', imageId);
+        const comments = await knex('Comments')
+            .join('Users', 'Comments.user_id', 'Users.id')
+            .select('Comments.*', 'Users.username')
+            .where('image_id', imageId);
+        return comments;
     }
 }

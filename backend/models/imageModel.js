@@ -4,6 +4,7 @@ import fs from 'fs';
 import sharp from 'sharp';
 import CommentModel from "./commentModel.js";
 import LikeModel from "./likeModel.js";
+import UserModel from "./userModel.js";
 
 export default class ImageModel {
     static async create(userId, overlayPath, backgoundPath) {
@@ -48,6 +49,7 @@ export default class ImageModel {
         const offset = (page - 1) * limitPerPage;
         images = await knex('Images').select('*').limit(limitPerPage).offset(offset);
         for (let image of images) {
+            image.username = (await UserModel.findById(image.user_id)).username;
             image.comments = await CommentModel.findAllByImageId(image.id);
             image.likes = await LikeModel.findAllByImageId(image.id);
         }
