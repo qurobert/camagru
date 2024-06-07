@@ -21,4 +21,9 @@ export default class CommentModel {
             .where('image_id', imageId);
         return comments;
     }
+
+    static async deleteAllByImageId(imageId) {
+        if (!imageId) throw new Error('Missing required fields');
+        return knex('Comments').where('image_id', imageId).del();
+    }
 }

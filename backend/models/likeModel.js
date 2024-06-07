@@ -24,4 +24,9 @@ export default class LikeModel {
         if (!imageId) throw new Error('Missing imageId required fields');
         return knex('Likes').where('image_id', imageId).andWhere('user_id', userId).del();
     }
+
+    static async deleteAllByImageId(imageId) {
+        if (!imageId) throw new Error('Missing imageId required fields');
+        return knex('Likes').where('image_id', imageId).del();
+    }
 }

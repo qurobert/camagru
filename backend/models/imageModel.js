@@ -54,9 +54,11 @@ export default class ImageModel {
     }
 
     static async deleteById(imageId, userId) {
+        console.log(imageId, userId)
         if (!imageId) throw new Error('Missing required fields');
         const image = await knex('Images').select('processed_path', 'user_id').where('id', imageId).first();
-        if (image.user_id !== userId) throw new Error(`Unauthorized`);
+        await CommentModel.deleteAllByImageId(imageId);
+        await LikeModel.deleteAllByImageId(imageId);
         if (image) {
             // Delete the file from storage
             fs.unlinkSync(image.processed_path);
