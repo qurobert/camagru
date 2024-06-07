@@ -3,11 +3,21 @@ import ImageModel from "../models/imageModel.js";
 export default class ImageController {
     static async create(req, res) {
         try {
-            const userId = req.user.id;
             const filterPath = req.files.filter[0].path;
             const imagePath = req.files.image[0].path;
-            await ImageModel.create(userId, filterPath, imagePath);
-            res.status(201).send("Image created and saved successfully.");
+            const path = await ImageModel.create(filterPath, imagePath);
+            res.status(201).json({ processed_path: path });
+        } catch (err) {
+            res.status(500).send(err.message);
+        }
+    }
+
+    static async publish(req, res) {
+        try {
+            const userId = req.user.id;
+            const processed_path = req.body.processed_path;
+            await ImageModel.publish(userId, processed_path);
+            res.status(201).send("Image published successfully.");
         } catch (err) {
             res.status(500).send(err.message);
         }

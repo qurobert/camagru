@@ -7,11 +7,11 @@ import LikeModel from "./likeModel.js";
 import UserModel from "./userModel.js";
 
 export default class ImageModel {
-    static async create(userId, overlayPath, backgoundPath) {
+    static async create(overlayPath, backgroundPath) {
         // Process the image with sharp and save the processed image
-        if (!userId || !overlayPath || !backgoundPath) throw new Error('Missing required fields');
+        if (!overlayPath || !backgroundPath) throw new Error('Missing required fields');
         const outputPath = path.join('uploads', `processed_${Date.now()}.png`);
-        const backgroundBuffer =  await sharp(backgoundPath)
+        const backgroundBuffer =  await sharp(backgroundPath)
             .resize(800, 800)
             .toBuffer();
 
@@ -26,13 +26,18 @@ export default class ImageModel {
             .toFile(outputPath);
 
         // Insert image data into database
+            // .returning('id') for the front end
+        return outputPath;
+    }
+
+    static async publish(userId, processedPath) {
+        if (!userId || !processedPath) throw new Error('Missing required fields');
         return knex('Images').insert({
             user_id: userId,
             original_path: "null",
-            processed_path: outputPath,
+            processed_path: processedPath,
             created_at: new Date(),
-        })
-            // .returning('id') for the front end
+        });
     }
 
     static async findAllByUserId(userId) {
@@ -53,18 +58,17 @@ export default class ImageModel {
         return images
     }
 
-    static async deleteById(imageId, userId) {
-        console.log(imageId, userId)
+    static async deleteById(imageId) {
         if (!imageId) throw new Error('Missing required fields');
         const image = await knex('Images').select('processed_path', 'user_id').where('id', imageId).first();
+        if (!image) throw new Error('Image not found');
         await CommentModel.deleteAllByImageId(imageId);
         await LikeModel.deleteAllByImageId(imageId);
         if (image) {
-            // Delete the file from storage
-            fs.unlinkSync(image.processed_path);
             // Remove the record from database
-            return knex('Images').where('id', imageId).del();
+            await knex('Images').where('id', imageId).del();
+            // Delete the file from storage
+            fs.unlinkSync(image.processed_path)
         }
-        throw new Error('Image not found');
     }
 }

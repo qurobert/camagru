@@ -1,4 +1,4 @@
-import {fetchWithToken, url_api} from "./global.js";
+import {fetchWithToken, fetchWithTokenAppJson, url_api} from "./global.js";
 
 const title = document.getElementById('title');
 const chooseImage = document.getElementById('chooseImage');
@@ -121,13 +121,10 @@ const startStream = async (constraints) => {
 	await setSelectVideoOptions();
 })();
 
-
-
 // Filter previous, next, valid
 previousButton.onclick = () => {
 	if (numero_filter <= 0)
 		return ;
-
 	numero_filter -= 1;
 	imageFilter.src = `/img/filter_${numero_filter}.jpg`;
 	imageFilter.style.display = 'block';
@@ -137,7 +134,7 @@ nextButton.onclick = () => {
 	if (numero_filter >= 6)
 		return ;
 	numero_filter += 1;
-	if (numero_filter === 0) {
+	if (numero_filter >= 0) {
 		previewButton.classList.remove('btn-secondary');
 		previewButton.classList.add('btn-primary');
 		previewButton.removeAttribute('disabled');
@@ -148,13 +145,9 @@ nextButton.onclick = () => {
 }
 
 previewButton.onclick = async () => {
-	console.log("coucou");
-	choosePublishMode();
-}
-
-validButton.onclick = async () => {
 	if (numero_filter === -1 || !imageFilter.src)
 		return;
+
 	let background = undefined;
 	let filter = await fetch(imageFilter.src).then(response => response.blob());
 	if (webcamStarted) {
@@ -167,26 +160,70 @@ validButton.onclick = async () => {
 	} else {
 		background = await fetch(imageContainer.src).then(response => response.blob());
 	}
+
 	const formData = new FormData();
 	formData.append('image', background, 'background.jpg');
 	formData.append('filter', filter, 'filter.jpg');
-	fetchWithToken('/images/create', {
+
+	fetchWithToken('/images/preview', {
 		method: 'POST',
-		headers: {
-			'Access-Control-Allow-Origin': '*'
-		},
 		body: formData
 	})
-		.then(response => response.text())
-		.then(_ => {
-			alert('Image created and saved successfully.');
-			initProfilePage();
-			refresh_image_publication();
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('Failed to preview image');
+			}
+			return response.json();
 		})
-}
+		.then(data => {
+			videoWebcam.style.display = 'none';
+			imageFilter.style.display = 'none';
+
+			// Show the processed image in the imageContainer
+			imageContainer.src = url_api + '/' + data.processed_path;
+			imageContainer.style.display = 'block';
+			// imageContainer.src = url_api + '/' + data.processed_path;
+			imageContainer.setAttribute('data-processed-path', data.processed_path); // Save the path for publishing
+			choosePublishMode();
+		})
+		.catch(error => {
+			// console.error("Failed to preview image", error);
+			alert("Failed to preview image: " + error.message);
+		});
+};
+
+validButton.onclick = async () => {
+	const processedPath = imageContainer.getAttribute('data-processed-path');
+	if (!processedPath) {
+		alert("No processed image to publish.");
+		return;
+	}
+
+	await fetchWithTokenAppJson('/images/publish', {
+		method: 'POST',
+		body: JSON.stringify({
+			processed_path: processedPath
+		})
+	})
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('Failed to publish image');
+			}
+			return response.text();
+		})
+		.then(_ => {
+			alert('Image published successfully.');
+			initProfilePage(); // Reset the page state after publishing
+		})
+		.catch(error => {
+			// console.error("Failed to publish image", error);
+			alert("Failed to publish image: " + error.message);
+		});
+};
 
 closeButton.onclick = () => {
 	chooseImageMode();
+	chooseFilterMode();
 }
 
 async function canvasToBlob(canvas, mimeType) {

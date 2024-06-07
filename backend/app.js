@@ -15,9 +15,6 @@ import { fileURLToPath } from 'url';
 const app = express()
 
 // Middleware
-app.use(express.json({ limit: '50mb'}));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
-app.use(morgan('dev'));
 app.use(cors({
 	origin: 'http://localhost',
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -25,6 +22,9 @@ app.use(cors({
 	preflightContinue: false,
 	// optionsSuccessStatus: 204
 }));
+app.use(express.json({ limit: '50mb'}));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(morgan('dev'));
 
 // Configurer les routes pour répondre aux requêtes préliminaires OPTIONS
 app.options('*', cors());

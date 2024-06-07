@@ -2,6 +2,7 @@ import knex from "./knexfile.js";
 import bcrypt from "bcryptjs";
 import {sendMail} from "../mail/sendMail.js";
 import AuthController from "../controllers/authController.js";
+import ErrorWithStatus from "../errors/ErrorWithStatus.js";
 
 export default class UserModel {
     static async findOneByEmail(email) {
@@ -41,9 +42,9 @@ export default class UserModel {
 
     static async login(email, password) {
         const user = await knex('Users').select('*').where('email', email).first()
-        if (!user) throw new Error("User not found")
-        if (!bcrypt.compareSync(password, user.password)) throw new Error("Invalid password")
-        if (!user.verify_email) throw new Error("Email not verified")
+        if (!user) throw new ErrorWithStatus(404, "User not found")
+        if (!bcrypt.compareSync(password, user.password)) throw new ErrorWithStatus(401, "Invalid password")
+        if (!user.verify_email) throw new ErrorWithStatus(401, "Email not verified")
         return user;
     }
 
