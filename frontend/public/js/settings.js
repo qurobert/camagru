@@ -1,4 +1,4 @@
-import {fetchWithToken, redirectTo} from "./global.js";
+import {fetchWithTokenAppJson, redirectTo} from "./global.js";
 
 const settingsForm = document.getElementById('setting-form');
 
@@ -9,21 +9,23 @@ settingsForm.addEventListener('submit', async (e) => {
     const password = data.get('password').trim();
     const username = data.get('username');
     const confirm_password = data.get('confirmPassword').trim();
+    const notification = document.getElementById('notification').checked;
     if (!checkEmail(email) || !checkUsername(username) || !checkPassword(password, confirm_password)) {
         displayAlert();
         return;
     }
-    if (!email && !password && !username && !confirm_password) {
+    if (!email && !password && !username && !confirm_password && notification === undefined) {
         alert('Nothing to update');
         return;
     }
-    fetchWithToken('/users/update', {
+    fetchWithTokenAppJson('/users/update', {
         method: 'POST',
         body: JSON.stringify({
             email: email === '' ? undefined : email,
             password: password === '' ? undefined : password.trim(),
             username: username === '' ? undefined : username,
-            confirm_password: confirm_password === '' ? undefined : confirm_password.trim()
+            confirm_password: confirm_password === '' ? undefined : confirm_password.trim(),
+            notification: notification
         })
     }).then(response => response.json())
     .then(data => {
@@ -69,7 +71,6 @@ function checkPassword(password, confirmPassword) {
         alert('Password does not meet the complexity requirements.');
         return false;
     }
-    // console.log(password, confirmPassword)
     if (password !== confirmPassword) {
         alert('Passwords do not match.');
         return false;

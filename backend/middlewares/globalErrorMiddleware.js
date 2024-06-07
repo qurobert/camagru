@@ -9,8 +9,8 @@ export const globalErrorMiddleware = (err, req, res, next) => {
 };
 
 export const globalErrorLogger = (err, req, res, next) => {
-	console.error('>>>>>>>>>>>>>>>>>>');
-	console.error(err);
-	console.error('<<<<<<<<<<<<<<<<<<');
+	// console.error('>>>>>>>>>>>>>>>>>>');
+	// console.error(err);
+	// console.error('<<<<<<<<<<<<<<<<<<');
 	next(err);
 };

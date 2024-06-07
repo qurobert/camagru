@@ -9,10 +9,7 @@ import UserModel from "./userModel.js";
 export default class ImageModel {
     static async create(userId, overlayPath, backgoundPath) {
         // Process the image with sharp and save the processed image
-        console.log(overlayPath, backgoundPath)
         if (!userId || !overlayPath || !backgoundPath) throw new Error('Missing required fields');
-        const processedBackgoundPath = path.join('uploads', `processed_background_${Date.now()}.png`);
-        const processedOverlayPath = path.join('uploads', `processed_overlay_${Date.now()}.png`);
         const outputPath = path.join('uploads', `processed_${Date.now()}.png`);
         const backgroundBuffer =  await sharp(backgoundPath)
             .resize(800, 800)

@@ -13,8 +13,7 @@ export const sendMail = async (to, subject, html) => {
 
 	return transporter.sendMail(mailOptions, (error, info) => {
 		if (error) {
-			return console.log(error);
+			// return console.error(error);
 		}
-		console.log('Message sent: %s', info.messageId);
 	});
 }

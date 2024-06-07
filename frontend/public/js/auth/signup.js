@@ -2,7 +2,6 @@ const form = document.getElementById('signup-form');
 import {redirectTo, sendMailVerification, setToken, setUserInfo, url_api} from "../global.js";
 
 form.addEventListener('submit', function (e) {
-	console.log("submitting form");
 	e.preventDefault();
 	const data = new FormData(form);
 	const email = data.get('email');
@@ -25,7 +24,6 @@ form.addEventListener('submit', function (e) {
 	})
 		.then(response => response.json())
 		.then(data => {
-			console.log(data);
 			if (data.status !== 200) {
 				displayAlert(data.message);
 				return;
@@ -36,7 +34,7 @@ form.addEventListener('submit', function (e) {
 			redirectTo('/email-verification');
 		})
 		.catch(error => {
-			console.log("Error", data);
+			// console.error("Error", data);
 			displayAlert(error.message);
 		})
 })

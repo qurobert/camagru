@@ -35,6 +35,7 @@ const router = {
 	"/forgot-password": {
 		pathView: createPathView("auth/forgot-password"),
 		pathScript: "./js/auth/forgot-password.js",
+		pathCss: "./css/auth.css",
 	},
 	"/profile": {
 		pathView: createPathView("profile"),

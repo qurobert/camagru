@@ -29,16 +29,15 @@ form.addEventListener('submit', async (e) => {
 			}
 		})
 		.catch(async (errorResponse) => {
-			console.log("ERREUR", errorResponse)
 			if (errorResponse.status === 500) {
 				const errorData = await errorResponse.json();
 				if (errorData.message === "Email not verified") {
 					// redirectTo('/email-verification');
 				} else {
-					console.error("Login failed:", errorData.message);
+					// console.error("Login failed:", errorData.message);
 				}
 			} else {
-				console.error("A network or server error occurred");
+				// console.error("A network or server error occurred");
 				alert("A network or server error occurred");
 			}
 		});

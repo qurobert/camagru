@@ -245,7 +245,9 @@ const refresh_image_publication = async () => {
 			createElementFromHiddenDiv(url_api + '/' + image.processed_path, image.id);
 		});
 	})
-	.catch(() => console.log("error"));
+	.catch(() => {
+		// console.error("error")
+	});
 }
 
 await refresh_image_publication();

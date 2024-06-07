@@ -1,6 +1,7 @@
 import knex from "./knexfile.js";
 import bcrypt from "bcryptjs";
 import {sendMail} from "../mail/sendMail.js";
+import AuthController from "../controllers/authController.js";
 
 export default class UserModel {
     static async findOneByEmail(email) {
@@ -56,11 +57,18 @@ export default class UserModel {
 
     static async updateEmail(userId, email) {
         if (!email) return
-        return knex('Users').where('id', userId).update({email})
+        //update email if email is not already in use
+        const userExist = await knex('Users').where('email', email).first()
+        if (userExist) return
+        const user = await  knex('Users').where('id', userId).update({email: email, verify_email: 0})
+        await AuthController.sendEmailLink(email)
+        return user
     }
 
     static async updateUsername(userId, username) {
         if (!username) return
+        const userExist = await knex('Users').where('username', username).first()
+        if (userExist) return
         return knex('Users').where('id', userId).update({username})
     }
 

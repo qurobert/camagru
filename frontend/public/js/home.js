@@ -54,7 +54,7 @@ const createElementFromHiddenDivHome = async (src, username, likes, comments, id
             body: formData.toString()
         });
         refreshImage()
-        alert('Post it');
+        alert('Posted');
     })
 
     // Likes

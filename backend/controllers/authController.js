@@ -11,7 +11,7 @@ export default class AuthController {
         const user = await UserModel.create(email, username, password);
         if (!user) throw new Error("User not created");
 
-        await AuthController._sendEmailLink(email);
+        await AuthController.sendEmailLink(email);
 
         return res.json({
             status: 200,
@@ -48,7 +48,7 @@ export default class AuthController {
 
     static async sendVerificationEmail(req, res) {
         const {email} = req.body;
-        await AuthController._sendEmailLink(email);
+        await AuthController.sendEmailLink(email);
         res.json({
             status: 200,
             message: "Email sent",
@@ -80,7 +80,7 @@ export default class AuthController {
         if (userExist) throw new ErrorWithStatus(400, "User already exists");
     }
 
-    static async _sendEmailLink(email) {
+    static async sendEmailLink(email) {
         const user = await UserModel.findOneByEmail(email);
         if (!user)
             throw new ErrorWithStatus(404, "User not found");

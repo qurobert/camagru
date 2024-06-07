@@ -56,8 +56,25 @@ export function fetchWithToken(url, options) {
 	return fetch(url_api + url, options);
 }
 
+export function fetchWithTokenAppJson(url, options) {
+	const token = getAccessToken();
+	if (token) {
+		options.headers = {
+			...options.headers,
+			Authorization: `Bearer ${token}`,
+			'Content-Type': 'application/json',
+			'Access-Control-Allow-Origin': '*'
+		}
+	}
+	return fetch(url_api + url, options);
+}
+
 // AUTHENTICATION
 export function isConnected() {
+	const token = getAccessToken();
+	if (!token) {
+		return false;
+	}
 	return fetchWithToken('/users/me', {
 		method: 'GET'
 	}).then(response => response.json())
@@ -68,7 +85,10 @@ export function isConnected() {
 		}
 		return false
 	})
-	.catch(() => false);
+	.catch((error) =>{
+		// console.error(error);
+		return false;
+	});
 }
 
 export function isVerifyEmail() {

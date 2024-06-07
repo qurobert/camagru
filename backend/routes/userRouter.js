@@ -11,8 +11,8 @@ const userRouter = express.Router();
 
 userRouter.get('/me', verifyAuth, UserController.getUserConnected);
 userRouter.get('/:id', verifyAuth, UserController.getUserById);
-userRouter.post('/forgot-password', verifyAuth, emailValidator(), UserController.forgotPassword);
-userRouter.post('/reset-password', verifyAuth, resetPassValidator(), UserController.resetPassword);
+userRouter.post('/forgot-password', emailValidator(), UserController.forgotPassword);
+userRouter.post('/reset-password', resetPassValidator(), UserController.resetPassword);
 userRouter.post('/update', verifyAuth, UserController.updateUser);
 
 export default userRouter
