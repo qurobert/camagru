@@ -109,3 +109,7 @@ export async function redirectProfileConnected() {
 		redirectTo('profile');
 	}
 }
+
+document.getElementById('navbar-toggler').addEventListener('click', () => {
+	document.getElementById('navbar').classList.toggle('show');
+})

@@ -3,10 +3,13 @@ import {fetchWithToken, url_api} from "./global.js";
 const title = document.getElementById('title');
 const chooseImage = document.getElementById('chooseImage');
 const chooseFilter = document.getElementById('chooseFilter');
-const validButton = document.getElementById('validButton');
+const chooseValid = document.getElementById('chooseValid');
+const previewButton = document.getElementById('previewButton');
 const imageFilter = document.getElementById('imageFilter');
 const previousButton = document.getElementById('previousFilter');
 const nextButton = document.getElementById('nextFilter');
+const validButton = document.getElementById('validButton');
+const closeButton = document.getElementById('closeButton');
 const imageContainer = document.getElementById('imageContainer');
 let numero_filter = -1;
 let webcamStarted = false;
@@ -23,20 +26,34 @@ file.addEventListener('change', (e) => {
 
 const chooseImageMode = () => {
 	chooseImage.style.display = 'block';
+	chooseValid.style.display = 'none';
 	imageContainer.style.display = 'none';
 	videoWebcam.style.display = 'block';
 	chooseFilter.style.display = 'none';
 	imageFilter.style.display = 'none';
-	validButton.style.display = 'none';
+	previewButton.style.display = 'none';
 	title.innerHTML = 'Choose Image';
 }
 
 const chooseFilterMode = () => {
+	chooseValid.style.display = 'none';
+	chooseValid.style.display = 'none';
 	chooseImage.style.display = 'none';
 	chooseFilter.style.display = 'flex';
-	validButton.style.display = 'block';
+	previewButton.style.display = 'block'
+	previewButton.classList.add('btn-secondary');
+	previewButton.classList.remove('btn-primary');
+	previewButton.setAttribute('disabled', 'disabled');
 	title.innerHTML = 'Choose Filter';
 }
+
+const choosePublishMode = () => {
+	chooseImage.style.display = 'none';
+	chooseValid.style.display = 'flex';
+	chooseFilter.style.display = 'none';
+	title.innerHTML = 'Valid Image';
+}
+
 
 const initProfilePage = () => {
 	chooseImageMode();
@@ -107,7 +124,6 @@ const startStream = async (constraints) => {
 
 
 // Filter previous, next, valid
-
 previousButton.onclick = () => {
 	if (numero_filter <= 0)
 		return ;
@@ -122,14 +138,18 @@ nextButton.onclick = () => {
 		return ;
 	numero_filter += 1;
 	if (numero_filter === 0) {
-		validButton.classList.remove('btn-secondary');
-		validButton.classList.add('btn-primary');
-		validButton.removeAttribute('disabled');
-
+		previewButton.classList.remove('btn-secondary');
+		previewButton.classList.add('btn-primary');
+		previewButton.removeAttribute('disabled');
 	}
 	imageFilter.src = `/img/filter_${numero_filter}.jpg`;
 	imageFilter.style.display = 'block';
 
+}
+
+previewButton.onclick = async () => {
+	console.log("coucou");
+	choosePublishMode();
 }
 
 validButton.onclick = async () => {
@@ -165,13 +185,8 @@ validButton.onclick = async () => {
 		})
 }
 
-async function getDataUrlFromBlob(blob) {
-	return new Promise((resolve, reject) => {
-		const reader = new FileReader();
-		reader.onloadend = () => resolve(reader.result);
-		reader.onerror = reject;
-		reader.readAsDataURL(blob);
-	});
+closeButton.onclick = () => {
+	chooseImageMode();
 }
 
 async function canvasToBlob(canvas, mimeType) {

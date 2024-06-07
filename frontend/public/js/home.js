@@ -123,9 +123,15 @@ async function addImage() {
         }
     })
 }
-await refreshImage();
+
 loadPublications.addEventListener("click", async(e) => {
     e.preventDefault();
     page += 1;
     await addImage();
 })
+
+async function initHomePage() {
+    await refreshImage();
+}
+
+await initHomePage();

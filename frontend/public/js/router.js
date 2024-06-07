@@ -133,7 +133,6 @@ function unloadScript() {
 	document.querySelector(".script")?.remove();
 }
 
-
 // Window Event
 window.addEventListener("popstate", async () => {
 	await loadPage(window.location.pathname);
@@ -141,12 +140,5 @@ window.addEventListener("popstate", async () => {
 
 window.addEventListener("DOMContentLoaded", async (e) => {
 	await loadApp();
-	document.querySelectorAll("a").forEach((a) => {
-		a.addEventListener("click", async (e) => {
-			e.preventDefault();
-			const path = a.getAttribute("href");
-			await loadPage(path);
-			history.pushState({}, path, window.location.origin + path);
-		})
-	})
+	// setupLinks();
 })
