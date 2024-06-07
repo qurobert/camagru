@@ -42,7 +42,7 @@ export default class AuthController {
             const user = await UserModel.findById(emailTokenInfo.id);
             if (!user) return res.sendStatus(403);
             await UserModel.validate_email(user.email);
-            return res.redirect('http://localhost/email-verified');
+            return res.redirect('http://localhost:8080/email-verified');
         })
     }
 
