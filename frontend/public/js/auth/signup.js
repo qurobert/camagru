@@ -25,7 +25,7 @@ form.addEventListener('submit', function (e) {
 		.then(response => response.json())
 		.then(data => {
 			if (data.status !== 200) {
-				displayAlert(data.message);
+				displayAlert("An error occured");
 				return;
 			}
 			setToken(data);
@@ -33,9 +33,8 @@ form.addEventListener('submit', function (e) {
 			sendMailVerification(email);
 			redirectTo('/email-verification');
 		})
-		.catch(error => {
-			// console.error("Error", data);
-			displayAlert(error.message);
+		.catch(_ => {
+			displayAlert("An error occured");
 		})
 })
 
@@ -66,8 +65,8 @@ function checkEmail(email) {
 }
 
 function checkUsername(username) {
-	if (username.length < 3) {
-		alert('Username must be at least 3 characters long.');
+	if (username.length < 6) {
+		alert('Username must be at least 6 characters long.');
 		return false;
 	}
 	return true;

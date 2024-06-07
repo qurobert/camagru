@@ -213,6 +213,7 @@ validButton.onclick = async () => {
 		})
 		.then(_ => {
 			alert('Image published successfully.');
+			refresh_image_publication();
 			initProfilePage(); // Reset the page state after publishing
 		})
 		.catch(error => {

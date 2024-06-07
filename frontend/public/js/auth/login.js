@@ -24,8 +24,10 @@ form.addEventListener('submit', async (e) => {
 				setToken(data);
 				setUserInfo({email});
 				redirectTo('/profile');
+			} else if (data.status === 401) {
+				alert("You need to verify your email first before logging in");
 			} else {
-				alert(data.message);
+				alert("Invalid password or email");
 			}
 		})
 		.catch(async (errorResponse) => {

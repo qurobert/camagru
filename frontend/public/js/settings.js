@@ -30,14 +30,13 @@ settingsForm.addEventListener('submit', async (e) => {
     }).then(response => response.json())
     .then(data => {
             if (data.status === 200) {
-
                 alert('Settings saved');
-                // if (email) {
-                //     redirectTo('/email-verification')
-                // } else
+                if (email) {
+                    redirectTo('/email-verification')
+                } else
                 redirectTo('/profile');
             } else {
-                displayAlert(data.message);
+                displayAlert("An error occurred");
             }
 
     }).catch(() => {
