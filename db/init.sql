@@ -1,17 +1,20 @@
 CREATE TABLE Users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
+    username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    verification_status BOOLEAN DEFAULT FALSE
+    verify_email BOOLEAN DEFAULT FALSE,
+    notification BOOLEAN DEFAULT TRUE,
+    code_password_reset VARCHAR(255) DEFAULT NULL
 );
 
-CREATE TABLE Images (
+CREATE TABLE IF NOT EXISTS Images (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    image_path VARCHAR(255) NOT NULL,
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(id)
+    original_path VARCHAR(255) NOT NULL,
+    processed_path VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Comments (
@@ -31,4 +34,3 @@ CREATE TABLE Likes (
     FOREIGN KEY (image_id) REFERENCES Images(id),
     FOREIGN KEY (user_id) REFERENCES Users(id)
 );
-
