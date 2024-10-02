@@ -25,7 +25,7 @@ form.addEventListener('submit', async (e) => {
 				setUserInfo({email});
 				redirectTo('/profile');
 			} else if (data.status === 401) {
-				alert("You need to verify your email first before logging in");
+				alert("Invalid password or email");
 			} else {
 				alert("Invalid password or email");
 			}
